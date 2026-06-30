@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Идентификация по голосу</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <h1>Расшифровка судебных заседаний</h1>
+            <span class="subtitle">Идентификация участников по образцу голоса</span>
+        </div>
+        <nav class="tabs">
+            <a href="/text" class="tab">📝 Текстовая расшифровка</a>
+            <a href="/classic" class="tab">⭐ По участникам</a>
+            <a href="/nemo-sortformer" class="tab">⚡ По участникам (до 4, не реком.)</a>
+            <a href="/nemo-msdd" class="tab">👥 По участникам (множество)</a>
+            <a href="/profiles" class="tab active">🎤 Идентификация по голосу</a>
+        </nav>
+        <div class="topbar-actions"></div>
+    </header>
+
+    <main>
+        <section class="upload-card">
+            <h2 style="margin-top:0; font-size:16px;">Добавление образца голоса</h2>
+            <p class="options-hint">
+                Загрузите образец речи участника (15–60 секунд непрерывной речи одного человека).
+                Чем меньше посторонних шумов и голосов, тем выше точность последующей идентификации.
+            </p>
+
+            <form id="add-form">
+                <label class="role-name-wrap">
+                    <span style="display:block; font-size:13px; color:var(--text-dim); margin-bottom:6px;">
+                        Имя для подстановки в расшифровку
+                    </span>
+                    <input type="text" name="name" id="profile-name" required
+                        placeholder="Например: Судья Иванов И.И."
+                        style="width:100%; padding:9px 12px; border:1px solid var(--border); border-radius:8px; font:inherit;">
+                </label>
+
+                <div id="drop-zone" class="drop-zone" tabindex="0" role="button"
+                     style="margin-top:14px;">
+                    <div class="drop-inner">
+                        <div class="drop-icon" aria-hidden="true">🎤</div>
+                        <div class="drop-title" id="drop-title">Перетащите образец голоса</div>
+                        <div class="drop-hint">mp3 · wav · m4a · ogg · opus · flac · webm</div>
+                    </div>
+                    <input type="file" id="file-input" accept="audio/*" hidden>
+                </div>
+
+                <div style="display:flex; justify-content:flex-end; margin-top:14px;">
+                    <button type="submit" class="primary-btn" id="submit-btn" disabled>
+                        Сохранить образец
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <section class="jobs">
+            <div class="jobs-header">
+                <h2>Сохранённые образцы голоса</h2>
+                <button id="refresh-btn" class="ghost-btn" title="Обновить">↻</button>
+            </div>
+            <div id="profiles-list" class="jobs-list">
+                <div class="empty">Образцы голоса отсутствуют. Добавьте первый выше.</div>
+            </div>
+        </section>
+    </main>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="/static/profiles.js"></script>
+</body>
+</html>

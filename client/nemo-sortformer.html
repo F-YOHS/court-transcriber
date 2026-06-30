@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>По участникам (до 4)</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body data-mode="nemo-sortformer">
+    <header class="topbar">
+        <div class="brand">
+            <h1>Расшифровка судебных заседаний</h1>
+            <span class="subtitle">Расшифровка с разделением по участникам (до четырёх)</span>
+        </div>
+        <nav class="tabs">
+            <a href="/text" class="tab">📝 Текстовая расшифровка</a>
+            <a href="/classic" class="tab">⭐ По участникам</a>
+            <a href="/nemo-sortformer" class="tab active">⚡ По участникам (до 4, не реком.)</a>
+            <a href="/nemo-msdd" class="tab">👥 По участникам (множество)</a>
+            <a href="/profiles" class="tab">🎤 Идентификация по голосу</a>
+        </nav>
+        <div class="topbar-actions">
+            <div class="backend-badge" id="backend-badge">…</div>
+            <button class="ghost-btn hidden" id="logout-btn">Выйти</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="mode-banner">
+            <h2>⚡ Расшифровка по участникам (до 4) — не рекомендуется</h2>
+            <p>
+                ⚠️ Не рекомендуется для типовых заседаний: в них обычно больше четырёх
+                участников (судья, прокурор, адвокат, секретарь, истец, ответчик, свидетели).
+                Режим жёстко ограничен четырьмя — лишних объединит. Используйте
+                «По участникам (множество)».
+            </p>
+            <div id="speaker-warning" class="speaker-warning hidden">
+                ⚠️ Указано участников: <strong><span id="speaker-warning-count">0</span></strong>.
+                Режим рассчитан не более чем на четырёх — при превышении реплики могут быть
+                объединены. Рекомендуется выбрать
+                <a href="/nemo-msdd">«По участникам (множество)»</a> или <a href="/classic">«По участникам»</a>.
+            </div>
+        </section>
+
+        <section class="upload-card">
+            <div id="drop-zone" class="drop-zone" tabindex="0" role="button"
+                 aria-label="Перетащите аудиофайл или нажмите чтобы выбрать">
+                <div class="drop-inner">
+                    <div class="drop-icon" aria-hidden="true">🎙️</div>
+                    <div class="drop-title">Перетащите аудиофайл сюда</div>
+                    <div class="drop-hint">mp3 · wav · m4a · ogg · opus · flac · mp4 · webm</div>
+                </div>
+                <input type="file" id="file-input" accept="audio/*,video/mp4,video/webm" hidden>
+            </div>
+
+            <div class="upload-actions">
+                <button type="button" class="ghost-btn" id="open-participants">
+                    👥 Состав участников <span class="participants-count">(0)</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="jobs">
+            <div class="jobs-header">
+                <h2>Расшифровки</h2>
+                <button id="refresh-btn" class="ghost-btn" title="Обновить">↻</button>
+            </div>
+            <div id="jobs-list" class="jobs-list">
+                <div class="empty">Записей пока нет. Загрузите аудиофайл выше.</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Модалка «Состав участников» -->
+    <div id="participants-modal" class="modal-backdrop hidden">
+        <div class="modal">
+            <header class="modal-header">
+                <h3>👥 Состав участников</h3>
+                <button class="ghost-btn" data-close="participants-modal" aria-label="Закрыть">✕</button>
+            </header>
+            <div class="modal-body">
+                <p class="participants-hint">
+                    Режим рассчитан не более чем на четырёх участников. Имена повышают
+                    точность распознавания фамилий. Данные сохраняются.
+                </p>
+
+                <h4>Основные участники</h4>
+                <div id="fixed-roles"></div>
+
+                <h4>Дополнительные участники</h4>
+                <div id="dynamic-roles"></div>
+
+                <div class="dynamic-actions">
+                    <button type="button" class="primary-btn" id="add-role">+ Добавить участника</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="primary-btn" data-close="participants-modal">Готово</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-backdrop" class="modal-backdrop hidden">
+        <div class="modal" role="dialog" aria-modal="true">
+            <header class="modal-header">
+                <h3 id="modal-title">Расшифровка</h3>
+                <button id="modal-close" class="ghost-btn" aria-label="Закрыть">✕</button>
+            </header>
+            <div id="modal-body" class="modal-body"></div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="/static/participants.js"></script>
+    <script src="/static/upload.js"></script>
+    <script src="/static/nemo-sortformer.js"></script>
+</body>
+</html>

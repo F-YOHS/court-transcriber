@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Court Transcriber — вход</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+        .login-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 32px;
+            width: 100%;
+            max-width: 360px;
+        }
+        .login-card h1 { margin: 0 0 6px; font-size: 20px; }
+        .login-card .hint {
+            color: var(--text-dim);
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+        .login-card label {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+        .login-card input {
+            padding: 9px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font: inherit;
+            background: var(--surface);
+        }
+        .login-card input:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: -1px;
+            border-color: var(--primary);
+        }
+        .login-card button {
+            width: 100%;
+            margin-top: 6px;
+            padding: 10px;
+            font: inherit;
+            font-weight: 500;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .login-card button:hover { background: var(--primary-hover); }
+        .login-card .error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+        .login-card .error.hidden { display: none; }
+    </style>
+</head>
+<body>
+    <form class="login-card" id="login-form">
+        <h1>Court Transcriber</h1>
+        <p class="hint">Введите имя пользователя и пароль.</p>
+        <div class="error hidden" id="error-box"></div>
+        <label>
+            <span>Имя пользователя</span>
+            <input type="text" name="username" autocomplete="username" required autofocus>
+        </label>
+        <label>
+            <span>Пароль</span>
+            <input type="password" name="password" autocomplete="current-password" required>
+        </label>
+        <button type="submit">Войти</button>
+    </form>
+
+    <script>
+        const form = document.getElementById("login-form");
+        const errorBox = document.getElementById("error-box");
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            errorBox.classList.add("hidden");
+            const fd = new FormData(form);
+            const body = {
+                username: fd.get("username"),
+                password: fd.get("password"),
+            };
+            try {
+                const r = await fetch("/api/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(body),
+                });
+                if (r.ok) {
+                    window.location.href = "/";
+                } else {
+                    const j = await r.json().catch(() => ({}));
+                    errorBox.textContent = j.detail || "Неверный логин или пароль";
+                    errorBox.classList.remove("hidden");
+                }
+            } catch (err) {
+                errorBox.textContent = "Сетевая ошибка: " + err.message;
+                errorBox.classList.remove("hidden");
+            }
+        });
+    </script>
+</body>
+</html>
